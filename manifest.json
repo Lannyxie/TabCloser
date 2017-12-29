@@ -1,0 +1,15 @@
+{
+  "short_name": "TabX",
+  "name": "Tabs Closer",
+  "permissions": [
+    "tabs"
+  ],
+  "manifest_version": 2,
+  "browser_action": {
+    "default_icon": "favIcon.png",
+    "default_popup": "index.html",
+    "default_title": "React Ext"
+  },
+
+  "version": "1.0"
+}
