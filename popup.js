@@ -1,28 +1,17 @@
-$(document).ready(() => { /*
-  chrome.tabs.query({},(tabs) => {
-     tabs.forEach((tab) => {
-       $("#listOfTabs").append("<li>" + tab.url + "</li>");
-     });
-  }); */
-
-
+$(document).ready(() => {
   $("#checkBoxes").empty(".a_row");
   $("#theButton").click(closeTabs);
   this.displayTabsOpen();
-
-
-
-
 });
 
-var currTabs = [];
+var pace = 3000;
 
 function displayTabsOpen() {
     chrome.tabs.query({},(tabs) => {
        tabs.forEach(function(tab) {
-         $("#checkBoxes").append("<input type=\"checkbox\" name=\"url\" value=\"" + tab.id + "\">" +
+         $("#checkBoxes").append("<input type=\"checkbox\" class=\"tabRow\""+
+         "name=\"url\" value=\"" + tab.id + "\">" +
          tab.url + "<br>");
-         currTabs.push(tab.id);
        }
      );
     });
@@ -30,5 +19,11 @@ function displayTabsOpen() {
 
 
 function closeTabs() {
-  chrome.tabs.remove(currTabs[0]);
+
+  var updatingInterval = setInterval(
+  $(".tabRow:checked").each(function() {
+      chrome.tabs.remove(parseInt($(this).val()));
+  }), pace);
+  clearInterval(updatingInterval);
+
 }
