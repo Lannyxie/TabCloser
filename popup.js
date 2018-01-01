@@ -4,7 +4,7 @@ $(document).ready(() => {
   this.displayTabsOpen();
 });
 
-var pace = 3000;
+var pace = 750;
 
 function displayTabsOpen() {
     chrome.tabs.query({},(tabs) => {
@@ -19,11 +19,11 @@ function displayTabsOpen() {
 
 
 function closeTabs() {
-
-  var updatingInterval = setInterval(
+  let curr = 1;
   $(".tabRow:checked").each(function() {
-      chrome.tabs.remove(parseInt($(this).val()));
-  }), pace);
-  clearInterval(updatingInterval);
+      setTimeout(() => chrome.tabs.remove(parseInt($(this).val())), pace * curr);
+      curr += 1;
+  });
+
 
 }
