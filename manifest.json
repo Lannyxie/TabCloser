@@ -8,13 +8,12 @@
   "browser_action": {
     "default_icon": "favIcon.png",
     "default_popup": "popup.html",
-    "default_title": "React Ext"
+    "default_title": "Tabs Closer"
   },
-  "content_scripts": [
-  {
-    "matches" : [ "http://*/*", "https://*/*"],
-    "js": ["popup.js"]
-  }],
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
   "content_security_policy": "script-src 'self' https://ajax.googleapis.com; object-src 'self'",
   "version": "1.0"
 }
