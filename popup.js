@@ -21,12 +21,11 @@ $(document).ready(() => {
 
 function displayTabsOpen() {
 
-
             chrome.tabs.query({},(tabs) => {
                tabs.forEach(function(tab) {
                  $("#checkBoxes").append("<input type=\"checkbox\" class=\"tabRow\""+
                  "name=\"url\" value=\"" + tab.id + "\">" + "<img src=" + tab.favIconUrl + " >" +
-                 tab.id + "<br>");
+                 tab.title + "<br>");
                }
              );
             });
