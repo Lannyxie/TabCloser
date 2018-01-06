@@ -11,6 +11,10 @@ chrome.runtime.onConnect.addListener(function(port) {
         tabsToCheck.forEach(function(tab) {console.log(tab)});
         port.postMessage({replyType:'checkedMore', data:tabsToCheck});
       }
+      else if (msg.request == 'uncheck') {
+        uncheckBox(msg.tabId);
+        console.log('unchecking msg sent');
+      }
     });
   }
 
@@ -18,24 +22,29 @@ chrome.runtime.onConnect.addListener(function(port) {
 
 
 chrome.tabs.onActivated.addListener(function(activeInfo) {
-  clearTimeout(idToTimeout[activeInfo.tabId]);
-  var loc = tabsToCheck.indexOf(activeInfo.tabId);
-  console.log('listening for changes to tab ' + activeInfo.tabId);
-  console.log('located at ' + loc);
-  if (loc >= 0)  {
-    tabsToCheck.splice(loc, 1);
-    console.log('unchecking the tab ' + activeInfo.tabId + ' , located at ' + loc);
-  }
+  uncheckBox(activeInfo.tabId);
   timeoutID(activeInfo.tabId);
 });
 
-/*
-chrome.tabs.onCreated.addListener(function(tab) {
-  console.log('tab id ' + tab.id + ' will be timed out');
-  setTimeout(() => tabsToCheck.push(tab.id), checkTime);
-  tabsToCheck.push(tab.id);
-});
-*/
+
+
+function uncheckBox(tabId) {
+  clearTimeout(idToTimeout[tabId]);
+  let loc = -1;
+  let idx = 0;
+  tabsToCheck.forEach(function(tab) {
+    if (tab == tabId) {
+        loc = idx;
+    }
+    idx++;
+  });
+  if (loc >= 0)  {
+    tabsToCheck.splice(loc, 1);
+    console.log('unchecking the tab ' + tabId + ' , located at ' + loc);
+  }
+
+}
+
 
 (function() {
     chrome.tabs.query({},(tabs) => {
