@@ -45,7 +45,6 @@ function displayTabsOpen(port) {
                      }
                  });
 
-
                  let img = document.createElement("img");
                  img.setAttribute("class", "favIcons");
                  img.setAttribute("src", tab.favIconUrl);

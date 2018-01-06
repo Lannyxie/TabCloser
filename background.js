@@ -1,19 +1,15 @@
 var checkTime = 10000;
 var tabsToCheck = [];
-
+var manuallyUnchecked = {};
 chrome.runtime.onConnect.addListener(function(port) {
-  console.log('port connected: ' + port);
   if (port.name == 'popup') {
     port.onMessage.addListener(function(msg) {
-        console.log('background received msg' + msg);
       if (msg.request == 'data') {
-        console.log('background was requested for data');
-        tabsToCheck.forEach(function(tab) {console.log(tab)});
         port.postMessage({replyType:'checkedMore', data:tabsToCheck});
       }
       else if (msg.request == 'uncheck') {
         uncheckBox(msg.tabId);
-        console.log('unchecking msg sent');
+        manuallyUnchecked[msg.tabId] = true;
       }
     });
   }
@@ -25,6 +21,24 @@ chrome.tabs.onActivated.addListener(function(activeInfo) {
   uncheckBox(activeInfo.tabId);
   timeoutID(activeInfo.tabId);
 });
+
+chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+
+  if (manuallyUnchecked[tabId]) {
+    console.log('manually unchecked, continue');
+    return;
+  }
+  else if (changeInfo.audible) {
+    console.log('audio changed');
+    uncheckBox(tab.id);
+
+  }
+  else if (changeInfo.url) {
+    console.log('url changed');
+    uncheckBox(tab.id);
+    timeoutID(tab.id);
+  }
+})
 
 
 
@@ -40,7 +54,6 @@ function uncheckBox(tabId) {
   });
   if (loc >= 0)  {
     tabsToCheck.splice(loc, 1);
-    console.log('unchecking the tab ' + tabId + ' , located at ' + loc);
   }
 
 }
@@ -55,7 +68,6 @@ function uncheckBox(tabId) {
 
 var idToTimeout = {};
 var setTabTimeout = function(tab) {
-  console.log('tab id ' + tab.id + ' will be timed out');
   timeoutID(tab.id);
 };
 
