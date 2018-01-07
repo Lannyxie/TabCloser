@@ -3,9 +3,36 @@
   height:16px;
 }
 
+#CloseButton {
+  float:left;
+  color: white;
+  text-shadow: 2px 2px 4px #000000;
+  background-color: #42f474;
+  border: 1px solid black;
+  margin: 5px;
+  padding: 10px;
+  cursor:pointer;
+}
+
+
+#CancelButton {
+  float:right;
+  color: white;
+  text-shadow: 2px 2px 4px #000000;
+  background-color: #ff4d4d;
+  border: 1px solid black;
+  margin: 5px;
+  padding: 10px;
+  cursor:pointer;
+}
+
 
 
 label {
+  cursor: pointer;
+  background-color: #4da6ff;
+  color: white;
+  text-shadow: 2px 2px 4px #000000;
   border: 1px solid black;
   width: 50px;
   overflow: hidden;

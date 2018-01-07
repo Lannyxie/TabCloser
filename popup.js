@@ -2,7 +2,7 @@ var pace = 750;
 
 $(document).ready(() => {
   $("#checkBoxes").empty(".a_row");
-  $("#theButton").click(closeTabs);
+  $("#CloseButton").click(closeTabs);
 
 
   var port = chrome.runtime.connect({name: "popup"});
@@ -83,10 +83,13 @@ function closeTabs() {
   let set = $(".tabRow:checked");
   let sz = set.length;
   set.each(function(idx, element) {
-    var boxID = parseInt($(this).val());
-      setTimeout(() => chrome.tabs.remove(boxID), pace * idx);
+
+    let curr = $(this);
+    var boxID = parseInt(curr.val());
+
+      setTimeout(() => {chrome.tabs.remove(boxID); curr.parent().remove();}, pace * idx);
       if (sz - 1 <= idx) {
-        setTimeout(() => {window.close();}, pace * idx + 1)
+        setTimeout(() => alert('tabs closed'), pace * idx + 500);
       }
 
   });
