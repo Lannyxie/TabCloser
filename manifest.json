@@ -2,7 +2,7 @@
   "short_name": "TabX",
   "name": "Tabs Closer",
   "permissions": [
-    "tabs"
+    "tabs", "alarms"
   ],
   "manifest_version": 2,
   "browser_action": {

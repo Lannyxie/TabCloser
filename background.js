@@ -16,25 +16,28 @@ chrome.runtime.onConnect.addListener(function(port) {
 
 });
 
+chrome.alarms.onAlarm.addListener(function(alarm) {
+  tabsToCheck.push(parseInt(alarm.name));
+});
 
+
+// if a tab is activated, uncheck the box, reset its timeout to the beginning
 chrome.tabs.onActivated.addListener(function(activeInfo) {
   uncheckBox(activeInfo.tabId);
   timeoutID(activeInfo.tabId);
 });
 
+// if tab is manuallyunchecked by user, do not reset or reset timeout for the tab
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 
   if (manuallyUnchecked[tabId]) {
-    console.log('manually unchecked, continue');
     return;
   }
   else if (changeInfo.audible) {
-    console.log('audio changed');
     uncheckBox(tab.id);
 
   }
   else if (changeInfo.url) {
-    console.log('url changed');
     uncheckBox(tab.id);
     timeoutID(tab.id);
   }
@@ -43,7 +46,7 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 
 
 function uncheckBox(tabId) {
-  clearTimeout(idToTimeout[tabId]);
+  chrome.alarms.clear(tabId.toString());
   let loc = -1;
   let idx = 0;
   tabsToCheck.forEach(function(tab) {
@@ -72,6 +75,5 @@ var setTabTimeout = function(tab) {
 };
 
 function timeoutID(id) {
-  var timeout = setTimeout(() => tabsToCheck.push(id), checkTime);
-  idToTimeout[id] = timeout;
+  chrome.alarms.create(id.toString(), {when: Date.now() + checkTime});
 }
